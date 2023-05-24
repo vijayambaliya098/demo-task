@@ -1,0 +1,23 @@
+.layout {
+  display: grid;
+  min-height: 100vh;
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "header  header"
+    "sidebar content";
+}
+
+header {
+  grid-area: header;
+  background-color: #00C6C6;
+  padding: 20px;
+}
+article {
+  grid-area: content;
+  padding: 20px;
+}
+aside {
+  grid-area: sidebar;
+  background-color: #101935;
+}

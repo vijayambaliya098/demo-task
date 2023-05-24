@@ -1,0 +1,12 @@
+.MuiTable-root .MuiTableRow-hover {
+    cursor: pointer;
+}
+.MuiTable-root .MuiTableSortLabel-active {
+    color: rgba(34, 51, 69, 0.6) !important;
+}
+.MuiTable-root .MuiTableSortLabel-icon {
+    color: rgba(34, 51, 69, 0.6) !important;
+}
+.MuiTable-root .MuiTableSortLabel-root:hover {
+    color: rgba(34, 51, 69, 0.6) !important;
+}

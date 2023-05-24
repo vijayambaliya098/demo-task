@@ -1,0 +1,12 @@
+.product-image {
+    height: 100px;
+}
+
+.search-product-wrapper {
+    flex-direction: row;
+    gap: 16px;
+}
+
+.search-product {
+    width: 250px;
+}
