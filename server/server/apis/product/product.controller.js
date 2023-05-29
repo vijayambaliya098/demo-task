@@ -76,24 +76,41 @@ class ProductController {
   //get all Products
   async getAllProduct(req, res, next) {
     try {
-      const { page, limit } = req.query;
-      const paginationFilter = {
-        limit: Number(limit) || 10,
-        skip: (Number(page) - 1) * limit,
-      };
-      const count = await Product.count({isActive: true})
-      let response = await Product.findAll(
-        paginationFilter
+      const page = req.query.page ? Number(req.query.page) : 1;
+      const limit = req.query.limit ? Number(req.query.limit) : 10;
+      const skip = (Number(page) - 1) * limit;
+      const sort = req.query.sort ? req.query.sort : "createdAt";
+      const orderby = req.query.orderby;
+      const minCost = req.query.minCost;
+      const maxCost = req.query.maxCost;
+      const character = req.query.character;
+      let filter = {};
+
+      if (minCost && maxCost) {
+        filter["cost"] = { $gte: minCost, $lte: maxCost };
+      }
+
+      if (character) {
+        filter["productName"] = { $regex: `^${character}`, $options: "i" };
+      }
+
+      let sortObject = {};
+      sortObject[sort] = orderby === "asc" ? 1 : -1;
+
+      let response = await Product.findProduct(filter, limit, skip).sort(
+        sortObject
       );
-     const newData = {
-      products:response,
-      count: count
-     }
+
+      const count = await Product.findProduct(filter).countDocuments();
+      response = {
+        data: response,
+        count: count,
+      };
       return res
         .status(httpStatus.OK)
         .json(
           new APIResponse(
-            newData,
+            response,
             "Product fetched successfully",
             httpStatus.OK
           )
@@ -116,27 +133,27 @@ class ProductController {
   async updateProductById(req, res, next) {
     try {
       const body = req.body;
-        const response = await Product.update(body);
-        if (response) {
-          return res
-            .status(httpStatus.OK)
-            .json(
-              new APIResponse(
-                response,
-                "Product updated successfully",
-                httpStatus.OK
-              )
-            );
-        }
+      const response = await Product.update(body);
+      if (response) {
         return res
-          .status(httpStatus.BAD_REQUEST)
+          .status(httpStatus.OK)
           .json(
             new APIResponse(
-              {},
-              "Product with the specified ID does not exists",
-              httpStatus.BAD_REQUEST
+              response,
+              "Product updated successfully",
+              httpStatus.OK
             )
           );
+      }
+      return res
+        .status(httpStatus.BAD_REQUEST)
+        .json(
+          new APIResponse(
+            {},
+            "Product with the specified ID does not exists",
+            httpStatus.BAD_REQUEST
+          )
+        );
     } catch (e) {
       return res
         .status(httpStatus.INTERNAL_SERVER_ERROR)

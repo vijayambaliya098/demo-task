@@ -4,7 +4,7 @@ import "./style.css";
 const Layout = ({ children }: any) => {
   return (
     <div className="layout">
-      <header>React Test</header>
+      <header>Dashboard</header>
       <article>{children}</article>
       <aside>
         <Sidebar />

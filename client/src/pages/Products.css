@@ -1,12 +1,27 @@
 .product-image {
-    height: 100px;
+  height: 100px;
 }
 
 .search-product-wrapper {
-    flex-direction: row;
-    gap: 16px;
+  display: flex;
+  gap: 16px;
+}
+
+.search-product-wrapper .form-input {
+  width: 300px;
 }
 
 .search-product {
-    width: 250px;
+  width: 250px;
+}
+
+.form-detail {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-add {
+  align-self: flex-start;
+  text-transform: capitalize !important;
+  background-color: #101935 !important;
 }

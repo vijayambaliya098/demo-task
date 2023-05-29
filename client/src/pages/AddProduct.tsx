@@ -1,20 +1,23 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./AddProducts.css";
-import { Alert, AlertColor } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
+import { Alert, AlertColor, Button, Snackbar } from "@mui/material";
 import axios from "axios";
+import CustomDialog from "../components/Dialog";
 
-const AddProduct = () => {
+type Props = {
+  showdialog: any;
+  setShowDialog: any;
+  productId: any;
+};
+
+const AddProduct = React.forwardRef((props: any, ref: any) => {
+  const { showdialog, setShowDialog, productId } = props;
   const initialState = {
     productName: "",
     productPrice: "",
   };
-  const navigate = useNavigate();
   const [formData, setFormData] = useState(initialState);
   const [error, setError] = useState<any>(null);
-  const params = useParams();
-  const { id: productId } = params;
-
   const [showAlert, setShowAlert] = useState<{
     message: string;
     type: AlertColor | undefined;
@@ -71,6 +74,10 @@ const AddProduct = () => {
     }
   };
 
+  useEffect(() => {
+    setError(null);
+  }, [showdialog]);
+
   const validateForm = () => {
     if (!formData.productName.trim().length) {
       return {
@@ -90,9 +97,9 @@ const AddProduct = () => {
     return { has_error: false, error: null, field: null };
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async () => {
     try {
-      e.preventDefault();
+      // e.preventDefault();
       const { has_error, message, field }: any = validateForm();
       if (has_error) {
         setError({ message, field });
@@ -127,6 +134,7 @@ const AddProduct = () => {
           type: "success",
         });
         setFormData(initialState);
+        setShowDialog(false);
         setTimeout(() => {
           setShowAlert({
             message: "",
@@ -134,7 +142,6 @@ const AddProduct = () => {
           });
         }, 3000);
       }
-      productId && navigate("/");
     } catch (error) {
       setShowAlert({
         message: "Something went wrong",
@@ -144,63 +151,84 @@ const AddProduct = () => {
     }
   };
 
+  const handleCancel = () => {
+    setShowDialog(false);
+  };
+
   return (
-    <div>
-      {showAlert.message && (
-        <Alert
-          severity={showAlert.type}
-          onClose={() =>
-            setShowAlert({
-              message: "",
-              type: undefined,
-            })
-          }
-        >
-          {showAlert.message}
-        </Alert>
-      )}
-      <h2>{productId ? "Edit Product" : "Add Product"}</h2>
-      <form>
-        <div className="form-fieldset">
-          <label className="form-label" htmlFor="productName">
-            Product Name
-          </label>
-          <input
-            placeholder="Enter Product Name"
-            className="form-input"
-            id="productName"
-            type="text"
-            name="productName"
-            value={formData.productName}
-            onChange={onChange}
-          />
-          {error && error.field && error.field === "productName" && (
-            <span className="error-field">{error.message}</span>
-          )}
-        </div>
-        <div className="form-fieldset">
-          <label className="form-label" htmlFor="productPrice">
-            Product Price
-          </label>
-          <input
-            placeholder="Enter Product Price"
-            className="form-input"
-            id="productPrice"
-            type="text"
-            name="productPrice"
-            value={formData.productPrice}
-            onChange={onChange}
-          />
-          {error && error.field && error.field === "productPrice" && (
-            <span className="error-field">{error.message}</span>
-          )}
-        </div>
-        <button className="submit-btn" type="button" onClick={handleSubmit}>
-          Submit
-        </button>
-      </form>
+    <div className="form-wrepper">
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={!!showAlert.message}
+        autoHideDuration={6000}
+        onClose={() =>
+          setShowAlert({
+            message: "",
+            type: undefined,
+          })
+        }
+      >
+        <Alert severity={showAlert.type}>{showAlert.message}</Alert>
+      </Snackbar>{" "}
+      <CustomDialog
+        setShowDialog={setShowDialog}
+        showdialog={showdialog}
+        dialogTitle={productId ? "Edit Product" : "Add Product"}
+        dialogActions={
+          <>
+            <Button variant="outlined" onClick={handleCancel}>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              type="submit"
+              onClick={handleSubmit}
+              className="add-product__btn"
+            >
+              Submit
+            </Button>
+          </>
+        }
+      >
+        <form>
+          <div className="form-fieldset">
+            <label className="form-label" htmlFor="productName">
+              Product Name
+            </label>
+            <input
+              placeholder="Enter Product Name"
+              className="form-input"
+              id="productName"
+              type="text"
+              name="productName"
+              value={formData.productName}
+              onChange={onChange}
+            />
+            {error && error.field && error.field === "productName" && (
+              <span className="error-field">{error.message}</span>
+            )}
+          </div>
+          <div className="form-fieldset">
+            <label className="form-label" htmlFor="productPrice">
+              Product Price
+            </label>
+            <input
+              placeholder="Enter Product Price"
+              className="form-input"
+              id="productPrice"
+              type="text"
+              name="productPrice"
+              value={formData.productPrice}
+              onChange={onChange}
+            />
+            {error && error.field && error.field === "productPrice" && (
+              <span className="error-field">{error.message}</span>
+            )}
+          </div>
+        </form>
+      </CustomDialog>
     </div>
   );
-};
+});
 
 export default AddProduct;

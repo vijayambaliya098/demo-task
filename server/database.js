@@ -2,9 +2,12 @@
 
 var mongoose = require('mongoose');
 var config = require('./config');
+// const authRoutes = require("./routes/auth");
 
 const mongoUri = config.db;
 const mongoConfig = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
     useCreateIndex: true,
     useNewUrlParser: true,
     poolSize: 2,

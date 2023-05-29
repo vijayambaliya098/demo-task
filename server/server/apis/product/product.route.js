@@ -19,6 +19,8 @@ router.put("/update", updateValidate, ProductController.updateProductById);
 // delete Product by id endpoint
 router.delete("/:id", IDparamRequiredValidation, ProductController.deleteProductById);
 
+
+
 const createProductValidation = Joi.object()
   .keys({
     productName: Joi.string().required().error(new Error("productName is required!")),

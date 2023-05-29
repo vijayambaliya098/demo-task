@@ -10,3 +10,7 @@
 .MuiTable-root .MuiTableSortLabel-root:hover {
     color: rgba(34, 51, 69, 0.6) !important;
 }
+
+.table-empty-placeholder {
+    text-align: center !important;
+}

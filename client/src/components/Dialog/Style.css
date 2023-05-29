@@ -1,0 +1,22 @@
+.custom-dialog__title {
+    font-family: inherit !important;
+    font-weight: 600 !important;
+    border-bottom: 1px solid #ddd;
+}
+
+.custom-dialog__content {
+    padding: 20px 24px !important;
+    border-bottom: 1px solid #ddd;
+}
+
+.custom-dialog__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 16px !important;
+}
+
+.custom-dialog__actions .MuiButton-root {
+    text-transform: capitalize;
+}

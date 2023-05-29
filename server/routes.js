@@ -2,7 +2,6 @@
 
 var config = require("./config");
 
-
 exports.setup = function (app) {
     console.log("Setting up routes.");
 

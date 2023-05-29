@@ -141,8 +141,9 @@ const CustomTable = (props: any) => {
             <TableRow>
               <TableCell
                 colSpan={props.tableHeader && props.tableHeader.length}
+                className="table-empty-placeholder"
               >
-                {/* <EmptyPlaceholder /> */}
+                No Data
               </TableCell>
             </TableRow>
           )}

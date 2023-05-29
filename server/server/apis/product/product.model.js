@@ -2,12 +2,13 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 const Utils = require("../../helpers/utils");
+const { schema } = require("joi/lib/types/object");
 
 //product schema
 var Schema = new Schema(
   {
     productName: { type: String, required: true },
-    cost: { type: String, required: true },
+    cost: { type: Number, required: true },
     isActive: { type: Boolean, default: true },
   },
   { timestamps: true }
@@ -25,8 +26,8 @@ Schema.statics.findById = function (id) {
 
 // find all products by authenticated user
 Schema.statics.findAll = function (paginationFilter) {
-    return this.find({ isActive: true }).skip(paginationFilter.skip).limit(paginationFilter.limit);
-  };
+  return this.find({ isActive: true }).skip(paginationFilter.skip).limit(paginationFilter.limit);
+};
 
 //product update by id
 Schema.statics.update = function (data) {
@@ -55,4 +56,11 @@ Schema.statics.delete = function (id) {
   );
 };
 
+Schema.statics.findProduct = function(filter,limit, skip) {
+  const data = this.find(filter).skip(skip).limit(limit)
+  return data
+}
+
 module.exports = mongoose.model("Product", Schema);
+
+

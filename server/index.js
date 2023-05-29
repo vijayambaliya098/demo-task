@@ -1,5 +1,6 @@
 "use strict";
 require('dotenv').config();
+// const authRoutes = require("./routes/auth");
 var express = require('express');
 var bodyParser = require('body-parser');
 var database = require("./database");
